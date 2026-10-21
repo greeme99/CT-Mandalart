@@ -1,0 +1,9 @@
+{
+  "name": "mandalart-planner",
+  "private": true,
+  "scripts": {
+    "test": "node --test tests/app.test.js",
+    "design:lint": "node --test --test-name-pattern='design tokens' tests/app.test.js",
+    "check": "node --test tests/app.test.js"
+  }
+}

@@ -1,0 +1,32 @@
+{
+  "project-workflow": {
+    "use_count": 5,
+    "last_used_at": "2026-10-17T12:56:14.364996Z",
+    "patch_count": 0,
+    "last_patched_at": null,
+    "created_at": "2026-01-01T00:00:00Z",
+    "state": "active",
+    "pinned": true,
+    "created_by": "template"
+  },
+  "ponytail": {
+    "use_count": 5,
+    "last_used_at": "2026-10-17T12:56:15.096152Z",
+    "patch_count": 0,
+    "last_patched_at": null,
+    "created_at": "2026-07-14T00:00:00Z",
+    "state": "active",
+    "pinned": true,
+    "created_by": "template"
+  },
+  "ponytail-review": {
+    "use_count": 4,
+    "last_used_at": "2026-10-17T12:56:15.7954440Z",
+    "patch_count": 0,
+    "last_patched_at": null,
+    "created_at": "2026-07-14T00:00:00Z",
+    "state": "active",
+    "pinned": true,
+    "created_by": "template"
+  }
+}

@@ -1,0 +1,1044 @@
+<!doctype html>
+<html lang="ko" data-theme="light">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="color-scheme" content="light dark">
+<title>만다라트 플래너 · 작은 실천, 큰 변화</title>
+<style id="app-styles">
+/* DESIGN TOKENS START */
+:root, [data-theme="light"] {
+  --color-bg-base: #f8fafc; --color-bg-surface: #ffffff; --color-bg-subtle: #f1f5f9; --color-bg-hover: #e2e8f0;
+  --color-primary: #0066ff; --color-primary-hover: #0052cc; --color-primary-light: #e0edff;
+  --gradient-primary: linear-gradient(135deg, #0066ff 0%, #3b82f6 100%);
+  --gradient-glass: linear-gradient(135deg, rgba(255,255,255,0.8), rgba(255,255,255,0.4));
+  --color-border: #f1f5f9; --color-border-strong: #e2e8f0;
+  --shadow-card: 0 4px 20px -2px rgba(15,23,42,0.05), 0 2px 6px -1px rgba(15,23,42,0.02);
+  --shadow-hover: 0 10px 25px -3px rgba(0,102,255,0.15);
+  --color-text-main: #0f172a; --color-text-body: #334155; --color-text-muted: #64748b; --color-text-on-primary: #ffffff;
+  --color-overlay: rgba(15,23,42,0.5);
+}
+[data-theme="dark"] {
+  --color-bg-base: #0f172a; --color-bg-surface: #1e293b; --color-bg-subtle: #334155; --color-bg-hover: #475569;
+  --color-primary: #6366f1; --color-primary-hover: #4f46e5; --color-primary-light: rgba(99,102,241,0.2);
+  --gradient-primary: linear-gradient(135deg, #6366f1 0%, #06b6d4 100%);
+  --gradient-glass: linear-gradient(135deg, rgba(255,255,255,0.05), rgba(255,255,255,0.01));
+  --color-border: #334155; --color-border-strong: #475569;
+  --shadow-card: 0 4px 20px -2px rgba(0,0,0,0.3); --shadow-hover: 0 10px 25px -3px rgba(99,102,241,0.3);
+  --color-text-main: #f8fafc; --color-text-body: #cbd5e1; --color-text-muted: #94a3b8; --color-text-on-primary: #ffffff;
+  --color-overlay: rgba(0,0,0,0.6);
+}
+:root {
+  --color-accent-sky: #38bdf8; --color-accent-cyan: #06b6d4; --color-accent-coral: #ff6b4a;
+  --color-accent-mint: #10b981; --color-accent-purple: #8b5cf6; --color-accent-yellow: #facc15;
+  --color-success: #10b981; --color-success-bg: rgba(16,185,129,0.12);
+  --color-warning: #f59e0b; --color-warning-bg: rgba(245,158,11,0.12);
+  --color-danger: #ef4444; --color-danger-bg: rgba(239,68,68,0.12);
+  --color-info: #3b82f6; --color-info-bg: rgba(59,130,246,0.12);
+  --space-xs: 4px; --space-sm: 8px; --space-md: 16px; --space-lg: 24px; --space-xl: 32px; --space-2xl: 48px;
+  --radius-sm: 6px; --radius-md: 10px; --radius-lg: 18px; --radius-pill: 9999px;
+  --font-h1: 1.875rem; --font-h2: 1.375rem; --font-h3: 1.125rem; --font-stat: 1.75rem; --font-body: 0.938rem; --font-caption: 0.813rem;
+  --font-family: 'Pretendard', 'Plus Jakarta Sans', 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+}
+/* DESIGN TOKENS END */
+* { box-sizing: border-box; }
+[hidden] { display: none !important; }
+body { margin: 0; min-width: 0; background: var(--color-bg-base); color: var(--color-text-body); font: var(--font-body)/1.5 var(--font-family); overflow-wrap: anywhere; }
+button, input, textarea, select { font: inherit; color: inherit; }
+button, .file-label { cursor: pointer; }
+button, .file-label, select { border: 1px solid var(--color-border-strong); background: var(--color-bg-surface); border-radius: var(--radius-pill); padding: var(--space-sm) var(--space-md); min-height: 44px; min-width: 44px; transition: all 0.2s cubic-bezier(0.4,0,0.2,1); }
+button:hover, .file-label:hover { background: var(--color-bg-subtle); transform: translateY(-2px); }
+button:active { transform: scale(0.97); }
+:focus-visible { outline: 3px solid var(--color-primary); outline-offset: 3px; }
+button:disabled { cursor: default; opacity: .5; }
+.primary { background: var(--color-primary); color: var(--color-text-on-primary); border-color: var(--color-primary); }
+.primary:hover { background: var(--color-primary-hover); }
+[data-theme="dark"] .primary, [data-theme="dark"] .cell-core { background: var(--color-primary-hover); }
+h1, h2, h3, p { margin: 0; }
+h1, h2, h3 { color: var(--color-text-main); }
+h1 { font-size: var(--font-h1); line-height: 1.2; }
+h2 { font-size: var(--font-h2); } h3 { font-size: var(--font-h3); }
+a { color: var(--color-primary); }
+.topbar { background: var(--color-bg-surface); border-bottom: 1px solid var(--color-border-strong); padding-top: env(safe-area-inset-top); padding-left: env(safe-area-inset-left); padding-right: env(safe-area-inset-right); }
+.topbar-inner { max-width: 1440px; margin: auto; padding: var(--space-md) var(--space-xl); display: flex; align-items: center; justify-content: space-between; gap: var(--space-md); flex-wrap: wrap; }
+.brand { order: 1; display: flex; align-items: center; gap: var(--space-sm); color: var(--color-text-main); font-weight: 700; letter-spacing: -.03em; font-size: var(--font-h3); }
+.brand-mark { display: grid; grid-template-columns: repeat(3, 6px); gap: 3px; padding: var(--space-sm); border-radius: var(--radius-md); background: var(--color-primary-light); }
+.brand-mark i { width: 6px; height: 6px; background: var(--color-primary); border-radius: 1px; }
+.toolbar { order: 2; display: flex; gap: var(--space-sm); flex-wrap: wrap; }
+.toolbar button { display: inline-flex; align-items: center; justify-content: center; gap: var(--space-xs); }
+.tool-icon { width: 17px; height: 17px; flex: 0 0 auto; fill: none; stroke: currentColor; stroke-width: 1.8; stroke-linecap: round; stroke-linejoin: round; }
+.header-actions { order: 3; display: flex; gap: var(--space-xs); margin-left: auto; }
+.header-icon-button { display: inline-flex; align-items: center; justify-content: center; padding: var(--space-sm); border-radius: 50%; }
+main { max-width: 1440px; margin: auto; padding: var(--space-xl); padding-left: max(var(--space-xl),env(safe-area-inset-left)); padding-right: max(var(--space-xl),env(safe-area-inset-right)); }
+.intro { display: flex; align-items: end; justify-content: space-between; gap: var(--space-lg); margin-bottom: var(--space-lg); }
+.eyebrow { color: var(--color-primary); font-weight: 700; font-size: var(--font-caption); letter-spacing: .12em; margin-bottom: var(--space-sm); }
+.project-title { display: block; width: min(680px,100%); border: 0; border-bottom: 1px solid transparent; font-size: var(--font-h1); font-weight: 700; padding: var(--space-xs) 0; background: transparent; color: var(--color-text-main); }
+.project-title:hover { border-color: var(--color-border-strong); }
+.muted, .helper { color: var(--color-text-muted); font-size: var(--font-caption); }
+.intro p { margin-top: var(--space-sm); }
+.local-badge { white-space: nowrap; background: var(--color-bg-surface); border: 1px solid var(--color-border-strong); border-radius: var(--radius-pill); padding: var(--space-sm) var(--space-md); font-size: var(--font-caption); }
+.local-badge::before { content: '●'; color: var(--color-success); margin-right: var(--space-sm); }
+.layout { display: grid; grid-template-columns: minmax(0, 1fr) 292px; gap: var(--space-lg); align-items: start; }
+.card { background: var(--color-bg-surface); border: 1px solid var(--color-border); border-radius: var(--radius-lg); box-shadow: var(--shadow-card); }
+.board-card { padding: var(--space-lg); }
+.board-header { display: flex; justify-content: space-between; align-items: center; gap: var(--space-md); margin-bottom: var(--space-md); }
+.board-header h2 { font-size: var(--font-h3); }
+.board-header .helper { max-width: 360px; text-align: right; }
+.mandalart-grid { display: grid; grid-template-columns: repeat(3,minmax(0,1fr)); gap: 3px; background: var(--color-border-strong); border: 3px solid var(--color-border-strong); width: 100%; aspect-ratio: 1; }
+.mandalart-block { display: grid; position: relative; grid-template-columns: repeat(3,minmax(0,1fr)); gap: 1px; min-width: 0; background: var(--color-border-strong); }
+.block-open { display: none; }
+.mandalart-cell { aspect-ratio: 1; min-width: 0; min-height: 0; position: relative; background: var(--color-bg-surface); display: flex; align-items: stretch; }
+.cell-editor { display: flex; align-items: center; justify-content: center; width: 100%; height: 100%; min-height: 0; min-width: 0; border: 0; border-radius: 0; background: transparent; padding: var(--space-sm); padding-bottom: var(--space-lg); text-align: center; white-space: pre-wrap; overflow-wrap: anywhere; font-size: clamp(9px,1.05vw,14px); line-height: 1.4; overflow: hidden; }
+.cell-editor:hover { transform: none; background: var(--color-bg-subtle); }
+.cell-action .cell-editor { padding-bottom: 44px; }
+.cell-editor span { max-height: 100%; overflow: auto; scrollbar-width: thin; }
+.cell-editor.empty { color: var(--color-text-muted); }
+.cell-subgoal { background: var(--color-primary-light); border-top: 3px solid var(--area-accent); }
+.cell-subgoal .cell-editor { font-weight: 700; padding-bottom: var(--space-sm); color: var(--color-text-main); }
+.cell-core { background: var(--color-primary); }
+.cell-core .cell-editor { color: var(--color-text-on-primary); font-weight: 700; padding-bottom: var(--space-sm); }
+.cell-core .cell-editor:hover { background: var(--color-primary-hover); }
+.completed { background: var(--color-success-bg); }
+.completed .cell-editor { text-decoration: line-through; }
+.check-target { position: absolute; bottom: 0; right: 0; width: 44px; height: 44px; display: flex; align-items: center; justify-content: center; cursor: pointer; }
+.action-check { margin: 0; width: 18px; height: 18px; accent-color: var(--color-primary); cursor: pointer; }
+.action-check:disabled { cursor: default; }
+.cell-input { width: 100%; height: 100%; min-height: 0; border: 2px solid var(--color-primary); border-radius: 0; resize: none; background: var(--color-bg-surface); color: var(--color-text-main); text-align: center; padding: var(--space-sm); font: inherit; font-size: max(13px,1vw); line-height: 1.4; }
+.board-bottom { margin-top: var(--space-md); display: flex; justify-content: space-between; flex-wrap: wrap; gap: var(--space-sm); }
+.legend { display: flex; gap: var(--space-md); font-size: var(--font-caption); color: var(--color-text-muted); }
+.legend span::before { content: '●'; color: var(--color-primary); margin-right: var(--space-xs); }
+.legend span:last-child::before { color: var(--color-success); }
+.sidebar { display: grid; gap: var(--space-md); }
+.sidebar .card { padding: var(--space-lg); }
+.section-label { text-transform: uppercase; font-size: var(--font-caption); font-weight: 700; letter-spacing: .08em; color: var(--color-text-muted); margin-bottom: var(--space-md); }
+.progress-stat { display: flex; justify-content: space-between; align-items: baseline; margin-bottom: var(--space-sm); }
+.progress-stat strong { font-size: var(--font-stat); color: var(--color-text-main); }
+progress { width: 100%; height: 8px; accent-color: var(--color-primary); border: none; border-radius: var(--radius-pill); overflow: hidden; background: var(--color-bg-subtle); }
+progress::-webkit-progress-bar { background: var(--color-bg-subtle); } progress::-webkit-progress-value { background: var(--color-primary); }
+progress::-moz-progress-bar { background: var(--color-primary); }
+.area-list { display: grid; gap: var(--space-sm); margin-top: var(--space-lg); }
+.area-row { display: grid; grid-template-columns: 1fr auto; gap: var(--space-sm); border-radius: var(--radius-md); padding: var(--space-sm); background: var(--color-bg-subtle); text-align: left; }
+.area-row:hover { box-shadow: var(--shadow-hover); }
+.area-name { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; color: var(--color-text-main); }
+.area-row progress { grid-column: 1/-1; height: 4px; }
+.area-row .count { color: var(--color-text-body); font-size: var(--font-caption); }
+.tip { background: var(--gradient-glass); }
+.tip h3 { margin-bottom: var(--space-sm); }
+.tip p + p { margin-top: var(--space-md); }
+.tip button { margin-top: var(--space-md); width: 100%; }
+.mobile-hint, .mobile-focus-start, .overview-toggle { display: none; }
+footer { max-width: 1440px; padding: 0 var(--space-xl) max(var(--space-lg),env(safe-area-inset-bottom)); margin: auto; display: flex; flex-wrap: wrap; justify-content: space-between; gap: var(--space-sm); color: var(--color-text-muted); font-size: var(--font-caption); }
+.notice { padding: var(--space-md); border-radius: var(--radius-md); background: var(--color-warning-bg); color: var(--color-text-main); margin-bottom: var(--space-md); overflow-wrap: anywhere; }
+dialog { width: min(700px,calc(100% - 32px)); max-height: calc(100dvh - 32px); padding: var(--space-lg); border: 1px solid var(--color-border-strong); border-radius: var(--radius-lg); background: var(--color-bg-surface); color: var(--color-text-body); box-shadow: var(--shadow-card); overflow: auto; overscroll-behavior: contain; }
+dialog::backdrop { background: var(--color-overlay); }
+.dialog-head { display: flex; align-items: start; justify-content: space-between; gap: var(--space-md); margin-bottom: var(--space-lg); }
+.dialog-head button { flex-shrink: 0; }
+.dialog-actions { display: flex; flex-wrap: wrap; justify-content: end; gap: var(--space-sm); margin-top: var(--space-lg); }
+.steps { display: grid; gap: var(--space-md); padding-left: var(--space-lg); }
+.steps li::marker { color: var(--color-primary); font-weight: 700; }
+.steps strong { display: block; color: var(--color-text-main); }
+.guide-section { padding: var(--space-md); margin-top: var(--space-lg); border-radius: var(--radius-md); background: var(--color-bg-subtle); }
+.guide-section h3 { margin-bottom: var(--space-sm); }
+.guide-section p + p { margin-top: var(--space-sm); }
+.tool-manual dl { display: grid; grid-template-columns: max-content 1fr; gap: var(--space-sm) var(--space-md); margin: var(--space-md) 0 0; }
+.tool-manual dt { color: var(--color-text-main); font-weight: 700; }
+.tool-manual dd { margin: 0; }
+.preset-list { display: grid; gap: var(--space-md); }
+.preset-option { border-radius: var(--radius-lg); text-align: left; padding: var(--space-lg); }
+.preset-option strong { display: block; color: var(--color-text-main); margin-bottom: var(--space-xs); font-size: var(--font-h3); }
+.preset-option span { display: block; color: var(--color-text-muted); font-size: var(--font-caption); }
+.focus-grid { display: grid; grid-template-columns: repeat(3,minmax(0,1fr)); gap: 1px; background: var(--color-border-strong); border: 3px solid var(--color-border-strong); }
+.focus-grid .cell-editor { font-size: clamp(13px,2vw,18px); padding: var(--space-md); padding-bottom: var(--space-xl); }
+.focus-grid .cell-action .cell-editor { padding-bottom: 44px; }
+.focus-grid .check-target { width: 44px; height: 44px; }
+.focus-grid .action-check { width: 24px; height: 24px; }
+.focus-grid .cell-input { font-size: 16px; }
+.sr-only { position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px; overflow: hidden; clip-path: inset(50%); border: 0; }
+@media (min-width: 1280px) {
+  .topbar-inner { gap: var(--space-lg); }
+  .board-card { padding: var(--space-lg); }
+}
+@media (min-width: 1024px) and (max-width: 1279px) {
+  .layout { grid-template-columns: minmax(0,1fr) 240px; gap: var(--space-md); }
+  .sidebar .card, .board-card { padding: var(--space-md); }
+  main { padding-top: var(--space-lg); padding-bottom: var(--space-lg); padding-left: max(var(--space-lg),env(safe-area-inset-left)); padding-right: max(var(--space-lg),env(safe-area-inset-right)); } .topbar-inner { padding: var(--space-md) var(--space-lg); }
+  .toolbar { gap: var(--space-xs); } .toolbar button { padding-inline: var(--space-sm); font-size: var(--font-caption); }
+}
+@media (min-width: 768px) and (max-width: 1023px) {
+  .layout { grid-template-columns: minmax(0,1fr) 216px; gap: var(--space-md); }
+  .topbar-inner { flex-wrap: wrap; } .toolbar { width: 100%; flex-wrap: wrap; }
+  .sidebar .card, .board-card { padding: var(--space-md); } main { padding-top: var(--space-md); padding-bottom: var(--space-md); padding-left: max(var(--space-md),env(safe-area-inset-left)); padding-right: max(var(--space-md),env(safe-area-inset-right)); }
+  .cell-editor { font-size: clamp(9px,1.25vw,13px); padding: var(--space-xs); padding-bottom: var(--space-lg); }
+  @media (pointer: fine) { .mandalart-grid .check-target { width: 30px; height: 30px; } .mandalart-grid .cell-action .cell-editor { padding-bottom: 30px; } }
+  .board-header .helper { max-width: 180px; }
+}
+@media (max-width: 767px) {
+  .header-actions { order: 2; } .toolbar { order: 3; }
+  main { padding: var(--space-md); padding-left: max(var(--space-md),env(safe-area-inset-left)); padding-right: max(var(--space-md),env(safe-area-inset-right)); } .topbar-inner { padding: var(--space-md); } .toolbar { width: 100%; }
+  .toolbar button, .toolbar .file-label { flex: 1 0 auto; padding: var(--space-sm); font-size: var(--font-caption); }
+  .intro { display: block; } .local-badge { display: inline-block; margin-top: var(--space-md); }
+  .project-title { font-size: var(--font-h2); } .layout { grid-template-columns: 1fr; }
+  .sidebar { grid-row: 1; } .area-list { grid-template-columns: repeat(2,minmax(0,1fr)); margin-top: var(--space-md); }
+  .tip { display: none; } .mobile-hint { display: block; margin-top: var(--space-sm); color: var(--color-text-muted); font-size: var(--font-caption); }
+  .mobile-focus-start { display: block; width: 100%; margin-top: var(--space-md); }
+  .board-header { align-items: start; } .board-header .helper { display: none; }
+  .cell-editor { font-size: clamp(8px,2vw,12px); padding: 2px; padding-bottom: 3px; }
+  .mandalart-grid .check-target { display: none; }
+  .block-open { display: block; position: absolute; inset: 0; z-index: 1; padding: 0; border: 0; border-radius: 0; background: transparent; }
+  .block-open:hover { transform: none; background: transparent; outline: 3px solid var(--color-primary); outline-offset: -3px; }
+  .mandalart-grid .cell-editor { pointer-events: none; }
+  .board-card { padding: var(--space-sm); } footer { padding: 0 var(--space-md) max(var(--space-md),env(safe-area-inset-bottom)); padding-left: max(var(--space-md),env(safe-area-inset-left)); padding-right: max(var(--space-md),env(safe-area-inset-right)); }
+  dialog { padding: var(--space-md); } .dialog-head h2 { font-size: var(--font-h3); }
+}
+@media (min-width: 600px) and (max-width: 767px) {
+  .area-list { grid-template-columns: repeat(3,minmax(0,1fr)); }
+  .mandalart-grid { max-width: 640px; margin-inline: auto; }
+}
+@media (max-width: 599px) {
+  .overview-toggle { display: inline-flex; align-items: center; }
+  .board-card .mandalart-grid, .board-card .board-bottom { display: none; }
+  .board-card.overview-open .mandalart-grid, .board-card.overview-open .board-bottom { display: grid; }
+  .board-header { margin: 0; align-items: center; } .overview-open .board-header { margin-bottom: var(--space-md); }
+  .board-header h2 { font-size: var(--font-body); }
+  .toolbar { display: grid; grid-template-columns: repeat(3,minmax(0,1fr)); }
+  .toolbar button { min-width: 0; } .toolbar .primary { grid-column: span 2; }
+  .intro .local-badge { font-size: var(--font-caption); }
+  dialog { width: 100%; max-width: none; max-height: calc(100dvh - env(safe-area-inset-top) - 8px); margin: auto 0 0; border-radius: var(--radius-lg) var(--radius-lg) 0 0; padding-bottom: max(var(--space-md),env(safe-area-inset-bottom)); padding-left: max(var(--space-md),env(safe-area-inset-left)); padding-right: max(var(--space-md),env(safe-area-inset-right)); }
+  .focus-grid .cell-editor { padding: var(--space-sm); padding-bottom: var(--space-xl); font-size: clamp(12px,3.4vw,16px); }
+}
+@media (pointer: coarse), (hover: none) {
+  button:hover { transform: none; } .check-target { width: 44px; height: 44px; }
+  .cell-action .cell-editor { padding-bottom: 44px; }
+  .cell-editor, .area-row, .block-open { touch-action: manipulation; }
+}
+@media (max-width: 1023px) and (pointer: coarse) {
+  .mandalart-grid .check-target { display: none; }
+  .mandalart-grid .cell-action .cell-editor { padding-bottom: var(--space-sm); }
+}
+@media (orientation: landscape) and (max-height: 600px) {
+  dialog { max-height: calc(100dvh - 16px); }
+  #focus-dialog { width: min(700px,calc(100% - 32px)); margin: auto; border-radius: var(--radius-lg); }
+  .focus-grid { width: min(100%,calc(100dvh - 160px)); margin-inline: auto; }
+  .focus-grid .cell-editor { font-size: clamp(10px,2.3vh,15px); padding: var(--space-xs); padding-bottom: var(--space-lg); }
+  .focus-grid .cell-subgoal .cell-editor, .focus-grid .cell-core .cell-editor { padding-bottom: var(--space-xs); }
+}
+@media (prefers-reduced-motion: reduce) { *, *::before, *::after { transition: none !important; scroll-behavior: auto !important; } }
+</style>
+</head>
+<body>
+<header class="topbar"><div class="topbar-inner">
+  <div class="brand"><span class="brand-mark" aria-hidden="true"><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i></span>만다라트 플래너</div>
+  <nav class="toolbar" aria-label="문서 도구">
+    <button id="preset-button"><svg class="tool-icon" aria-hidden="true" viewBox="0 0 24 24"><path d="M4 5h7v6H4zM13 5h7v6h-7zM4 13h7v6H4zM13 13h7v6h-7z"/></svg><span>템플릿</span></button><button id="guide-button"><svg class="tool-icon" aria-hidden="true" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M9.8 9a2.4 2.4 0 1 1 3.4 2.2c-.8.4-1.2 1-1.2 1.8M12 17h.01"/></svg><span>작성 가이드</span></button>
+    <button id="import-button"><svg class="tool-icon" aria-hidden="true" viewBox="0 0 24 24"><path d="M12 3v12m-4-4 4 4 4-4M5 20h14"/></svg><span>JSON 가져오기</span></button><input type="file" id="import-file" accept=".json,application/json" hidden>
+    <button id="json-button"><svg class="tool-icon" aria-hidden="true" viewBox="0 0 24 24"><path d="M12 3v12m-4-4 4 4 4-4M5 20h14" transform="rotate(180 12 12)"/></svg><span>JSON 백업</span></button><button id="png-button" class="primary"><svg class="tool-icon" aria-hidden="true" viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="16" rx="2"/><circle cx="8" cy="9" r="1.5"/><path d="m5 17 4-4 3 3 2-2 5 5"/></svg><span>PNG 저장 ↗</span></button>
+    <button id="reset-button"><svg class="tool-icon" aria-hidden="true" viewBox="0 0 24 24"><path d="M4 12a8 8 0 1 0 2.3-5.7L4 8.6M4 4v4.6h4.6"/></svg><span>새로 만들기</span></button>
+  </nav>
+  <div class="header-actions">
+    <button id="theme-button" class="header-icon-button" aria-label="다크 테마로 전환" aria-pressed="false" title="다크 테마로 전환"><svg class="tool-icon" aria-hidden="true" viewBox="0 0 24 24"><path d="M20 15.5A8 8 0 0 1 8.5 4 8.5 8.5 0 1 0 20 15.5z"/></svg><span class="sr-only">다크</span></button>
+    <button id="manual-button" class="manual-button header-icon-button" aria-label="사용자 매뉴얼 열기" title="사용자 매뉴얼"><svg class="tool-icon" aria-hidden="true" viewBox="0 0 24 24"><path d="M4 5.5A2.5 2.5 0 0 1 6.5 3H11a2 2 0 0 1 2 2v15a2 2 0 0 0-2-2H6.5A2.5 2.5 0 0 0 4 20.5zM20 5.5A2.5 2.5 0 0 0 17.5 3H13v17a2 2 0 0 1 2-2h2.5a2.5 2.5 0 0 1 2.5 2.5z"/></svg></button>
+  </div>
+</div></header>
+<main id="main">
+  <section class="intro" aria-label="프로젝트">
+    <div><div class="eyebrow">SMALL ACTIONS, BIG CHANGE</div><h1 class="sr-only">나의 만다라트 목표</h1>
+      <label class="sr-only" for="project-title">만다라트 제목</label><input id="project-title" class="project-title" maxlength="200" value="나의 만다라트" aria-label="만다라트 제목">
+      <p class="muted">하나의 목표에서 시작해, 오늘의 작은 실천으로 이어가세요.</p>
+    </div><span class="local-badge">내 브라우저에만 저장</span>
+  </section>
+  <div id="notice" class="notice" role="alert" hidden></div>
+  <div class="layout">
+    <section class="card board-card" aria-labelledby="board-title">
+      <div class="board-header"><h2 id="board-title">나의 목표 지도</h2><p class="helper">셀을 눌러 편집 · Enter 저장/다음 · Shift+Enter 줄바꿈 · Esc 취소</p><button id="overview-button" class="overview-toggle" aria-expanded="false" aria-controls="mandalart-grid">81칸 전체 보기</button></div>
+      <div id="mandalart-grid" class="mandalart-grid" aria-label="81칸 만다라트"></div>
+      <div class="board-bottom"><div class="legend"><span>목표와 핵심 영역</span><span>완료한 실천</span></div><button id="core-focus-button">중앙 목표 집중 작성 ↗</button></div>
+    </section>
+    <aside class="sidebar" aria-label="진척도와 작성 도움말">
+      <section class="card"><div class="section-label">나의 실천 현황</div>
+        <div class="progress-stat"><strong id="total-percent">0%</strong><span id="total-count" class="muted">0 / 64 완료</span></div>
+        <progress id="total-progress" max="64" value="0" aria-label="전체 실천 진척도"></progress>
+        <button id="mobile-core-focus-button" class="primary mobile-focus-start">핵심 목표부터 집중 작성 ↗</button>
+        <p class="mobile-hint">아래 영역을 눌러 3×3 집중 모드로 작성하세요.</p>
+        <div id="area-progress" class="area-list"></div>
+      </section>
+      <section class="card tip"><div class="section-label">작성을 돕는 작은 힌트</div><h3>다짐을 행동으로</h3>
+        <p>“영어 잘하기”를<br>“매일 영어 기사 1편 읽기”로.</p><p class="muted">횟수와 시간을 정하면 오늘 해야 할 일이 선명해집니다. 완료한 행동은 체크해 보세요.</p><button id="tip-guide-button">4단계 작성법 보기 →</button>
+      </section>
+    </aside>
+  </div>
+</main>
+<footer><span id="save-status" role="status" aria-live="polite">작성할 준비가 되었어요</span><span>1개의 목표 · 8개의 영역 · 64개의 실천</span></footer>
+<dialog id="focus-dialog" role="dialog" aria-modal="true" aria-labelledby="focus-title">
+  <div class="dialog-head"><div><div class="eyebrow">FOCUS MODE</div><h2 id="focus-title">집중 작성</h2></div><button data-close aria-label="집중 모드 닫기">닫기 ×</button></div>
+  <div id="focus-grid" class="focus-grid"></div><p class="helper">Enter 저장/다음 · Shift+Enter 줄바꿈 · Esc 입력 취소<br>행동 예시: 매일 아침 영어 기사 1편 읽기</p>
+</dialog>
+<dialog id="guide-dialog" role="dialog" aria-modal="true" aria-labelledby="guide-title">
+  <div class="dialog-head"><div><div class="eyebrow">GETTING STARTED</div><h2 id="guide-title">81칸, 네 단계면 충분해요</h2></div><button data-close aria-label="작성 가이드 닫기">닫기 ×</button></div>
+  <p>만다라트는 중심 목표를 세부 영역과 실천으로 펼치는 목표 작성 기법입니다. 이름에는 ‘목적을 달성하는 기술’이라는 뜻이 담겨 있습니다.</p>
+  <ol class="steps">
+    <li><strong>핵심 목표 하나를 정하세요</strong>정중앙에 가장 이루고 싶은 목표를 적어요. 예: 외국계 기업 취업.</li>
+    <li><strong>목표를 지탱하는 8개 영역을 적으세요</strong>중앙 주변에 어학, 직무, 면접, 체력 등 필요한 영역을 써요.</li>
+    <li><strong>같은 방향의 외곽으로 확장돼요</strong>중앙 ↔ 외곽 중심은 자동으로 연결돼요. 어느 쪽에서 바꿔도 같은 값이에요.</li>
+    <li><strong>영역마다 8개 행동을 채우세요</strong>“열심히 공부하기” 대신 “매일 아침 영어 기사 1편 읽기”처럼 측정 가능한 행동을 적고 실천 후 체크해요.</li>
+  </ol>
+  <section class="guide-section"><h3>오타니 쇼헤이에게 배워요</h3><p>오타니의 목표는 ‘8구단 드래프트 1순위’. 기술뿐 아니라 인간성, 멘탈, 운동도 목표를 이루는 조건으로 적었습니다.</p><p>인간성 → 감사와 배려 · 멘탈 → 일희일비하지 않기 · 운 → 쓰레기 줍기와 인사하기. 통제할 수 있는 작은 행동부터 시작해 보세요.</p></section>
+  <section class="guide-section"><h3>작성법의 출처</h3><p>「[20대의 삶을 업그레이드 하자] 만다라트 기법 편(feat.오타니 쇼헤이)」</p><p>슈퍼루키(SUPER ROOKIE) 에디터 곰취</p><a href="https://www.superookie.com/contents/58ad51348b129f715f45c49f" target="_blank" rel="noopener noreferrer">원문 읽기 ↗</a></section>
+  <div class="dialog-actions"><button id="guide-preset-button">샘플 템플릿으로 시작</button><button class="primary" data-close>나의 목표 작성하기</button></div>
+</dialog>
+<dialog id="manual-dialog" role="dialog" aria-modal="true" aria-labelledby="manual-title">
+  <div class="dialog-head"><div><div class="eyebrow">USER MANUAL</div><h2 id="manual-title">상단 기능 메뉴 사용법</h2></div><button data-close aria-label="사용자 매뉴얼 닫기">닫기 ×</button></div>
+  <p>작성 내용은 이 브라우저에 자동 저장됩니다. 다른 기기로 옮기거나 별도로 보관할 때는 JSON 백업을 사용하세요.</p>
+  <section class="guide-section tool-manual"><dl><dt>템플릿</dt><dd>샘플 목표를 선택해 81칸을 한 번에 채웁니다. 현재 내용은 확인 후 교체됩니다.</dd><dt>작성 가이드</dt><dd>핵심 목표부터 64개 실천까지 작성하는 네 단계를 안내합니다.</dd><dt>테마</dt><dd>라이트·다크 화면을 전환하며 선택한 테마는 브라우저에 저장됩니다.</dd><dt>JSON 가져오기</dt><dd>이 앱에서 백업한 JSON 파일을 검증한 뒤 불러옵니다.</dd><dt>JSON 백업</dt><dd>제목·목표·완료 상태를 복구 가능한 파일로 저장합니다.</dd><dt>PNG 저장</dt><dd>현재 81칸 전체를 2160×2160 PNG 이미지로 저장합니다.</dd><dt>새로 만들기</dt><dd>확인 후 모든 작성 내용을 빈 만다라트로 초기화합니다.</dd></dl></section>
+  <div class="dialog-actions"><button class="primary" data-close>확인</button></div>
+</dialog>
+<dialog id="preset-dialog" role="dialog" aria-modal="true" aria-labelledby="preset-title"><div class="dialog-head"><div><div class="eyebrow">A PLACE TO START</div><h2 id="preset-title">템플릿으로 시작하기</h2></div><button data-close>닫기 ×</button></div><div id="preset-list" class="preset-list"></div></dialog>
+<dialog id="confirm-dialog" role="dialog" aria-modal="true" aria-labelledby="confirm-title"><div class="dialog-head"><h2 id="confirm-title">작성 내용을 바꿀까요?</h2><button data-close>닫기 ×</button></div><p id="confirm-message">현재 작성한 목표와 완료 상태가 바뀝니다. 필요하면 먼저 JSON으로 백업해 주세요.</p><div class="dialog-actions"><button data-close autofocus>취소</button><button id="confirm-accept" class="primary">바꾸기</button></div></dialog>
+<script type="application/json" id="preset-data">
+{
+  "version": "1.0.0",
+  "templates": [
+    {
+      "id": "ohtani-shohei",
+      "title": "오타니 쇼헤이 목표 달성 템플릿",
+      "category": "스포츠 / 자기계발",
+      "description": "오타니 쇼헤이 선수가 고교 시절 '8구단 드래프트 1순위'를 목표로 작성했던 전설적인 81칸 만다라트입니다.",
+      "coreGoal": "8구단 드래프트 1순위",
+      "subGoals": [
+        {
+          "index": 0,
+          "title": "몸 만들기",
+          "color": "#4A90E2",
+          "actions": [
+            "몸 만들기 프로그램 준수",
+            "영양제 및 비타민 섭취",
+            "가동역 넓히기",
+            "스태미나 강화",
+            "RS(회전근개) 강화",
+            "식사 아침3, 저녁7그릇",
+            "유연성 기르기",
+            "체중 90kg 도달"
+          ]
+        },
+        {
+          "index": 1,
+          "title": "제구력",
+          "color": "#50E3C2",
+          "actions": [
+            "인스텝 개선",
+            "축 흔들리지 않기",
+            "불안정 해소",
+            "릴리스 포인트 안정",
+            "체간 단련",
+            "하반신 주도 투구",
+            "원하는 코스 투구",
+            "폼의 재현성 향상"
+          ]
+        },
+        {
+          "index": 2,
+          "title": "구위",
+          "color": "#F5A623",
+          "actions": [
+            "각도 있는 투구",
+            "상하 각도 만들기",
+            "손목 강화",
+            "손가락 끝 힘 기르기",
+            "볼 회전수 증가",
+            "하체 중심 이동",
+            "릴리스 임팩트 순간 집중",
+            "가동성 극대화"
+          ]
+        },
+        {
+          "index": 3,
+          "title": "스피드 160km/h",
+          "color": "#E94E77",
+          "actions": [
+            "체중 증량",
+            "어깨 주변 근력 강화",
+            "하체 탄력 기르기",
+            "회전축 안정",
+            "가동성 확장",
+            "라이너성 투구 의식",
+            "피칭 폼 간결화",
+            "어깨 유연성 유지"
+          ]
+        },
+        {
+          "index": 4,
+          "title": "변화구",
+          "color": "#9013FE",
+          "actions": [
+            "카운트 잡는 슬라이더",
+            "낙차 큰 포크볼",
+            "커브 완성도 높이기",
+            "체인지업 습득",
+            "직구와 같은 폼 유지",
+            "손가락 그립 연구",
+            "스트라이크 존 공략",
+            "결정구 연마"
+          ]
+        },
+        {
+          "index": 5,
+          "title": "운",
+          "color": "#7ED321",
+          "actions": [
+            "인사하기",
+            "쓰레기 줍기",
+            "방 청소하기",
+            "야구 장비 소중히 다루기",
+            "심판에게 공손히 대하기",
+            "책 읽기",
+            "긍정적인 생각하기",
+            "응원받는 사람 되기"
+          ]
+        },
+        {
+          "index": 6,
+          "title": "인간성",
+          "color": "#B8E986",
+          "actions": [
+            "감사의 마음 갖기",
+            "예의범절 지키기",
+            "배려심 실천",
+            "신뢰받는 사람 되기",
+            "동료 존중하기",
+            "계획성 있는 생활",
+            "약속 시간 엄수",
+            "겸손한 태도 유지"
+          ]
+        },
+        {
+          "index": 7,
+          "title": "멘탈",
+          "color": "#BD10E0",
+          "actions": [
+            "일희일비하지 않기",
+            "핀치 상황 즐기기",
+            "뚜렷한 목표 의식",
+            "동료를 배려하는 마음",
+            "감정 기복 조절",
+            "경기 중 침착함 유지",
+            "자신감 갖기",
+            "실패를 배움으로 전환"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "career-job-seeker",
+      "title": "외국계/글로벌 기업 취업 템플릿",
+      "category": "취업 / 커리어",
+      "description": "슈퍼루키 취업 가이드를 반영하여 외국계 및 IT 글로벌 기업 합격을 목표로 구성된 커리어 로드맵 만다라트입니다.",
+      "coreGoal": "외국계 글로벌 기업 취업",
+      "subGoals": [
+        {
+          "index": 0,
+          "title": "어학 역량",
+          "color": "#4A90E2",
+          "actions": [
+            "토익 950+ / 오픽 AL 취득",
+            "비즈니스 영어 이메일 작성 연습",
+            "영문 경제 기사 매일 1편 정독",
+            "주 3회 영어 회화/섀도잉 30분",
+            "영문 레주메(CV) 완성 및 첨삭",
+            "영문 커버레터 템플릿 작성",
+            "외국계 직무 인터뷰 예상 Q&A 준비",
+            "TED 강연 청취 및 요약 정리"
+          ]
+        },
+        {
+          "index": 1,
+          "title": "직무 전문성",
+          "color": "#50E3C2",
+          "actions": [
+            "직무 관련 필수 자격증 1개 취득",
+            "타깃 포지션 Job Description 20개 분석",
+            "산업 트렌드 리포트 주 1회 분석",
+            "핵심 업무 툴(SQL/Figma/GA 등) 숙달",
+            "온라인 직무 부트캠프/강의 완강",
+            "현직자 멘토링 세션 2회 참석",
+            "직무 스터디 주 1회 운영/참여",
+            "경쟁사 비즈니스 모델 분석 보고서 작성"
+          ]
+        },
+        {
+          "index": 2,
+          "title": "실무 프로젝트",
+          "color": "#F5A623",
+          "actions": [
+            "문제 해결 중심 프로젝트 2건 완료",
+            "데이터 기반 성과 수치화(KPI 달성률)",
+            "GitHub 또는 노션 공개 저장소 구축",
+            "프로젝트 트러블슈팅 일지 기록",
+            "팀 협업 및 갈등 해결 사례 정리",
+            "코드 리뷰 또는 동료 피드백 수렴",
+            "사용자 피드백 반영한 v2 개선 배포",
+            "프로젝트 회고(KPT) 문서화"
+          ]
+        },
+        {
+          "index": 3,
+          "title": "포트폴리오",
+          "color": "#E94E77",
+          "actions": [
+            "STAR 기법 기반 경험 정리",
+            "시각화된 PDF/웹 포트폴리오 제작",
+            "1분 자기소개 영상 촬영 및 점검",
+            "핵심 역량 키워드 3가지 도출",
+            "현직자/선배 포트폴리오 피드백 3회",
+            "반응형 웹 지원 개인 랜딩페이지",
+            "프로젝트별 기여도 및 결과 명시",
+            "정기적 업데이트 및 최신화"
+          ]
+        },
+        {
+          "index": 4,
+          "title": "인턴십/실무 경험",
+          "color": "#9013FE",
+          "actions": [
+            "스타트업/외국계 인턴 1회 수료",
+            "실무 프로젝트 주도적 기여",
+            "사내 업무 툴 및 슬랙 커뮤니케이션 적응",
+            "인턴십 성과 보고서 작성",
+            "상사/동료 추천서(Recommendation) 확보",
+            "실무 프로젝트 산출물 아카이빙",
+            "업무 자동화 작은 개선 시도",
+            "근무 기간 중 주간 업무일지 기록"
+          ]
+        },
+        {
+          "index": 5,
+          "title": "면접 및 스피치",
+          "color": "#7ED321",
+          "actions": [
+            "행동사례면접(BEI) 모의 질의응답 완성",
+            "영어 모의면접 주 2회 스터디",
+            "답변 태도 및 시선 처리 녹화 피드백",
+            "기업 맞춤형 역질문 5가지 준비",
+            "압박 면접 시 침착한 마인드 유지 훈련",
+            "비언어적 요소(자세, 목소리 톤) 교정",
+            "기업 최근 뉴스/이슈 10개 스크랩",
+            "지원동기 및 입사 후 포부 1분 스피치"
+          ]
+        },
+        {
+          "index": 6,
+          "title": "체력 및 멘탈",
+          "color": "#B8E986",
+          "actions": [
+            "주 4회 유산소 및 근력 운동",
+            "일정 기상/취침 루틴 유지 (7시간 수면)",
+            "서류 탈락 시 회고 후 24시간 내 털어내기",
+            "감사 일기 및 마인드풀니스 명상 10분",
+            "주 1회 디지털 디톡스 및 온전한 휴식",
+            "카페인 섭취 조절 및 수분 섭취 2L",
+            "비타민 및 건강 보조제 챙겨먹기",
+            "취업 준비 번아웃 방지 자기보상 주기"
+          ]
+        },
+        {
+          "index": 7,
+          "title": "네트워킹",
+          "color": "#BD10E0",
+          "actions": [
+            "링크드인(LinkedIn) 프로필 100% 완성",
+            "희망 기업 현직자 커피챗 3회 요청",
+            "산업 콘퍼런스/세미나 분기별 1회 참석",
+            "링크드인 주 1회 전문성 관련 인사이트 공유",
+            "동문 선후배 네트워크 교류",
+            "관심 기업 채용설명회 참석",
+            "HR 리크루터 10명과 1촌 맺기",
+            "스터디원들과 긍정적 시너지 형성"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "new-year-growth",
+      "title": "시간과 경제적 자유 템플릿",
+      "category": "라이프스타일 / 부의 축적",
+      "description": "파이프라인 구축, 자산 관리, 건강 및 마인드셋을 종합하여 삶의 질을 높이는 균형 잡힌 라이프스타일 만다라트입니다.",
+      "coreGoal": "시간과 경제적 자유 달성",
+      "subGoals": [
+        {
+          "index": 0,
+          "title": "자산 증식",
+          "color": "#4A90E2",
+          "actions": [
+            "월 저축률 60% 이상 달성",
+            "미국 지수 ETF 적립식 투자",
+            "가계부 매일 기록 및 지출 점검",
+            "불필요한 고정 지출 3가지 절감",
+            "비상금 6개월치 분리 보관",
+            "연금저축/IRP 세제 혜택 최대화",
+            "재무제표 읽는 법 학습",
+            "연간 순자산 성장률 20% 달성"
+          ]
+        },
+        {
+          "index": 1,
+          "title": "추가 파이프라인",
+          "color": "#50E3C2",
+          "actions": [
+            "수익형 블로그 주 3회 포스팅",
+            "디지털 콘텐츠/전자책 1권 출간",
+            "무자본 지식 창업 아이템 발굴",
+            "유튜브/숏폼 채널 개설 및 운영",
+            "온라인 스토어 또는 위탁판매 실험",
+            "외주/프리랜서 부수입 월 50만원",
+            "자동화 시스템 구축 연구",
+            "제휴 마케팅 링크 최적화"
+          ]
+        },
+        {
+          "index": 2,
+          "title": "본업 역량 강화",
+          "color": "#F5A623",
+          "actions": [
+            "핵심 업무 자동화로 시간 단축",
+            "분기별 인사고과 최상위 획득",
+            "연봉 협상 스킬 및 시장가치 점검",
+            "사내 핵심 프로젝트 주도",
+            "직무 관련 신기술 선제적 도입",
+            "팀 내 멘토링 및 리더십 발휘",
+            "업무 매뉴얼 작성 및 프로세스 개선",
+            "직무 외부 강의 또는 발표 도전"
+          ]
+        },
+        {
+          "index": 3,
+          "title": "독서 및 지식",
+          "color": "#E94E77",
+          "actions": [
+            "연간 도서 50권 완독 (주 1권)",
+            "독서 노트 및 핵심 요약 작성",
+            "경제/철학/심리학 고전 읽기",
+            "월 1회 독서 모임 참여",
+            "매일 아침 30분 책 읽기 루틴",
+            "읽은 책 지인에게 추천 및 공유",
+            "배운 내용 실생활에 1가지 적용",
+            "도서관 정기 이용 및 신간 서칭"
+          ]
+        },
+        {
+          "index": 4,
+          "title": "신체 건강",
+          "color": "#9013FE",
+          "actions": [
+            "체지방률 남 15% / 여 22% 유지",
+            "주 3회 헬스 웨이트 트레이닝",
+            "주 2회 달리기(5km)",
+            "가공식품 및 당류 줄이기",
+            "하루 물 2L 마시기",
+            "매일 15분 스트레칭/폼롤러",
+            "연 1회 종합 건강검진",
+            "스마트워치 일일 8,000보 달성"
+          ]
+        },
+        {
+          "index": 5,
+          "title": "멘탈 & 마인드셋",
+          "color": "#7ED321",
+          "actions": [
+            "아침 기상 후 10분 명상",
+            "매일 밤 감사 일기 3줄 작성",
+            "비교하지 않는 나만의 기준 수립",
+            "부정적인 감정 즉시 객관화하기",
+            "새로운 도전에 대한 두려움 없애기",
+            "스토아 철학/마인드셋 공부",
+            "주말 자연 속 산책과 사색",
+            "실패를 데이터로 정의하기"
+          ]
+        },
+        {
+          "index": 6,
+          "title": "가족 및 인간관계",
+          "color": "#B8E986",
+          "actions": [
+            "부모님께 주 1회 안부 전화",
+            "가족과 월 1회 의미 있는 외식",
+            "에너지 빼앗는 유해 관계 정리",
+            "긍정적이고 성장 지향적 모임 형성",
+            "소중한 사람 생일/기념일 챙기기",
+            "경청하는 대화 습관 기르기",
+            "분기별 1회 소규모 여행",
+            "칭찬과 격려의 말 아끼지 않기"
+          ]
+        },
+        {
+          "index": 7,
+          "title": "취미 및 휴식",
+          "color": "#BD10E0",
+          "actions": [
+            "나만의 몰입 취미 1가지 즐기기",
+            "연 2회 낯선 곳으로의 여행",
+            "전자기기 끄고 온전한 쉼 갖기",
+            "클래식/재즈 음악 감상",
+            "문화 예술 전시회 분기별 관람",
+            "요리 만들어 대접하기",
+            "취미 관련 커뮤니티 활동",
+            "매일 30분 자유로운 나만의 시간"
+          ]
+        }
+      ]
+    }
+  ]
+}
+
+</script>
+<script id="app-runtime">
+(function () {
+  'use strict';
+  const SCHEMA_VERSION = 1;
+  const SLOT_ORDER = [0, 1, 2, 3, 5, 6, 7, 8];
+  const COLOR_TOKENS = ['--color-primary', '--color-accent-sky', '--color-accent-coral', '--color-accent-mint', '--color-accent-purple', '--color-accent-yellow', '--color-accent-cyan', '--color-info'];
+  const DEFAULT_TITLE = '나의 만다라트';
+  function fail(path, message) { throw new TypeError(path + ': ' + message); }
+  function text(value, path, max) {
+    if (typeof value !== 'string') fail(path, '문자열이 필요합니다');
+    if (value.length > max) fail(path, max + '자 이내로 입력하세요');
+    if (/[\u0000-\u0008\u000b\u000c\u000e-\u001f\ud800-\udfff\ufffe\uffff]/u.test(value)) fail(path, 'XML 1.0에서 허용하지 않는 문자가 포함되어 있습니다');
+    return value;
+  }
+  function acceptTextInput(current, candidate, path, max) {
+    try { return { value: text(candidate, path, max), error: null }; }
+    catch (error) { return { value: current, error: error.message }; }
+  }
+  function timestamp(value, path, fallback) {
+    if (value === undefined) return fallback;
+    if (typeof value !== 'string' || !/^\d{4}-\d{2}-\d{2}T/.test(value) || !Number.isFinite(Date.parse(value))) fail(path, 'ISO 8601 시각이 필요합니다');
+    return value;
+  }
+  function createBlankData() {
+    const now = new Date().toISOString();
+    return { schemaVersion: SCHEMA_VERSION, id: 'mandalart-' + Date.now(), title: DEFAULT_TITLE, coreGoal: '',
+      subGoals: SLOT_ORDER.map(function (_, index) {
+        return { index: index, title: '', colorToken: COLOR_TOKENS[index], actions: SLOT_ORDER.map(function (_, id) { return { id: String(id), text: '', completed: false }; }) };
+      }), createdAt: now, updatedAt: now, theme: 'light' };
+  }
+  function normalizeDocument(input) {
+    if (!input || typeof input !== 'object' || Array.isArray(input)) fail('document', '객체가 필요합니다');
+    if (input.schemaVersion !== undefined && input.schemaVersion !== SCHEMA_VERSION) fail('schemaVersion', '지원하지 않는 버전입니다');
+    if (input.schemaVersion === SCHEMA_VERSION) ['createdAt', 'updatedAt', 'theme'].forEach(function (field) { if (input[field] === undefined) fail(field, '저장 문서의 필수값입니다'); });
+    const now = new Date().toISOString();
+    const id = text(input.id, 'id', 200);
+    if (!id.trim()) fail('id', '빈 값은 사용할 수 없습니다');
+    const title = text(input.title, 'title', 200);
+    const coreGoal = text(input.coreGoal, 'coreGoal', 500);
+    if (!Array.isArray(input.subGoals) || input.subGoals.length !== 8) fail('subGoals', '정확히 8개 영역이 필요합니다');
+    const subGoals = input.subGoals.map(function (goal, index) {
+      const path = 'subGoals[' + index + ']';
+      if (!goal || typeof goal !== 'object' || Array.isArray(goal)) fail(path, '객체가 필요합니다');
+      if (goal.index !== index) fail(path + '.index', '배열 순서와 같은 0~7 인덱스가 필요합니다');
+      if (!Array.isArray(goal.actions) || goal.actions.length !== 8) fail(path + '.actions', '정확히 8개 행동이 필요합니다');
+      const result = { index: index, title: text(goal.title, path + '.title', 500), colorToken: COLOR_TOKENS[index],
+        actions: goal.actions.map(function (action, actionIndex) {
+          const actionPath = path + '.actions[' + actionIndex + ']';
+          if (typeof action === 'string') return { id: String(actionIndex), text: text(action, actionPath, 500), completed: false };
+          if (!action || typeof action !== 'object' || Array.isArray(action)) fail(actionPath, '문자열 또는 행동 객체가 필요합니다');
+          if (action.id !== String(actionIndex)) fail(actionPath + '.id', '배열 순서와 같은 문자열 0~7이 필요합니다');
+          if (typeof action.completed !== 'boolean') fail(actionPath + '.completed', 'true 또는 false가 필요합니다');
+          const actionText = text(action.text, actionPath + '.text', 500);
+          if (action.completed && !actionText.trim()) fail(actionPath + '.completed', '빈 행동은 완료할 수 없습니다');
+          return { id: String(actionIndex), text: actionText, completed: action.completed };
+        }) };
+      const sourceColor = goal.sourceColor === undefined ? goal.color : goal.sourceColor;
+      if (sourceColor !== undefined) {
+        if (typeof sourceColor !== 'string' || !/^#[0-9a-fA-F]{6}$/.test(sourceColor)) fail(path + '.sourceColor', '6자리 HEX 메타데이터가 필요합니다');
+        result.sourceColor = sourceColor;
+      }
+      return result;
+    });
+    if (input.theme !== undefined && input.theme !== 'light' && input.theme !== 'dark') fail('theme', 'light 또는 dark가 필요합니다');
+    return { schemaVersion: SCHEMA_VERSION, id: id, title: title, coreGoal: coreGoal, subGoals: subGoals,
+      createdAt: timestamp(input.createdAt, 'createdAt', now), updatedAt: timestamp(input.updatedAt, 'updatedAt', now), theme: input.theme || 'light' };
+  }
+  function validateDocument(input) { try { return { valid: true, data: normalizeDocument(input) }; } catch (error) { return { valid: false, error: error.message }; } }
+  function getCellBinding(blockSlot, cellSlot) {
+    if (!Number.isInteger(blockSlot) || blockSlot < 0 || blockSlot > 8 || !Number.isInteger(cellSlot) || cellSlot < 0 || cellSlot > 8) fail('slot', '0~8이 필요합니다');
+    if (blockSlot === 4) return cellSlot === 4 ? { type: 'coreGoal' } : { type: 'subGoal', index: SLOT_ORDER.indexOf(cellSlot) };
+    const index = SLOT_ORDER.indexOf(blockSlot);
+    return cellSlot === 4 ? { type: 'subGoal', index: index } : { type: 'action', index: index, actionIndex: SLOT_ORDER.indexOf(cellSlot) };
+  }
+  function readBinding(data, binding) { return binding.type === 'coreGoal' ? data.coreGoal : binding.type === 'subGoal' ? data.subGoals[binding.index].title : data.subGoals[binding.index].actions[binding.actionIndex].text; }
+  function updateBinding(data, binding, value) {
+    text(value, binding.type, 500);
+    if (binding.type === 'coreGoal') data.coreGoal = value;
+    else if (binding.type === 'subGoal') data.subGoals[binding.index].title = value;
+    else { const action = data.subGoals[binding.index].actions[binding.actionIndex]; action.text = value; if (!value.trim()) action.completed = false; }
+    data.updatedAt = new Date().toISOString();
+    return data;
+  }
+  function captureBinding(data, binding) { return { text: readBinding(data, binding), completed: binding.type === 'action' ? data.subGoals[binding.index].actions[binding.actionIndex].completed : null, updatedAt: data.updatedAt }; }
+  function restoreBinding(data, binding, snapshot) { updateBinding(data, binding, snapshot.text); if (binding.type === 'action') data.subGoals[binding.index].actions[binding.actionIndex].completed = snapshot.completed; data.updatedAt = snapshot.updatedAt; return data; }
+  function toggleAction(data, index, actionIndex) { const action = data.subGoals[index].actions[actionIndex]; if (action.text.trim()) action.completed = !action.completed; data.updatedAt = new Date().toISOString(); return data; }
+  function calculateProgress(data) { const byArea = data.subGoals.map(function (g) { return g.actions.filter(function (a) { return a.completed; }).length; }); const completed = byArea.reduce(function (sum, count) { return sum + count; }, 0); return { completed: completed, total: 64, percent: completed / 64 * 100, byArea: byArea }; }
+  function escapeHtml(value) { return String(value).replace(/[&<>"']/g, function (char) { return { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[char]; }); }
+  function bindingKey(binding) { return binding.type + (binding.index === undefined ? '' : ':' + binding.index) + (binding.actionIndex === undefined ? '' : ':' + binding.actionIndex); }
+  function parseBinding(key) { const parts = key.split(':'); return { type: parts[0], index: Number(parts[1]), actionIndex: Number(parts[2]) }; }
+  function renderCellMarkup(data, blockSlot, cellSlot, overview) {
+    const b = getCellBinding(blockSlot, cellSlot), value = readBinding(data, b), key = bindingKey(b), action = b.type === 'action' ? data.subGoals[b.index].actions[b.actionIndex] : null;
+    const placeholder = b.type === 'coreGoal' ? '나의 핵심 목표' : b.type === 'subGoal' ? '영역 ' + (b.index + 1) : '실천 ' + (b.actionIndex + 1);
+    const kind = b.type === 'coreGoal' ? 'cell-core' : b.type === 'subGoal' ? 'cell-subgoal' : 'cell-action';
+    const accent = b.index === undefined ? COLOR_TOKENS[0] : COLOR_TOKENS[b.index];
+    return '<div class="mandalart-cell ' + kind + (action && action.completed ? ' completed' : '') + '" data-block="' + blockSlot + '" data-cell="' + cellSlot + '" style="--area-accent:var(' + accent + ')">' +
+      '<button class="cell-editor' + (value ? '' : ' empty') + '" data-binding="' + key + '" tabindex="' + (overview ? '-1' : '0') + '" aria-label="' + escapeHtml(placeholder + ': ' + (value || '비어 있음')) + '"><span>' + escapeHtml(value || placeholder) + '</span></button>' +
+      (action ? '<label class="check-target"><input class="action-check" type="checkbox" data-action="' + b.index + ':' + b.actionIndex + '" aria-label="' + escapeHtml((value || placeholder) + ' 완료') + '"' + (action.completed ? ' checked' : '') + (!value.trim() ? ' disabled' : '') + '></label>' : '') + '</div>';
+  }
+  function renderBlockMarkup(data, blockSlot, overview) { return Array.from({ length: 9 }, function (_, cellSlot) { return renderCellMarkup(data, blockSlot, cellSlot, overview); }).join(''); }
+  function renderGridMarkup(data, overview) { return Array.from({ length: 9 }, function (_, blockSlot) { const name = blockSlot === 4 ? '핵심 목표' : data.subGoals[SLOT_ORDER.indexOf(blockSlot)].title || '영역 ' + (SLOT_ORDER.indexOf(blockSlot) + 1); return '<div class="mandalart-block" data-block-slot="' + blockSlot + '">' + renderBlockMarkup(data, blockSlot, overview) + '<button class="block-open" data-focus="' + blockSlot + '" aria-label="' + escapeHtml(name + ' 집중 작성') + '"></button></div>'; }).join(''); }
+  function serializeDocument(data) { return JSON.stringify(normalizeDocument(data), null, 2); }
+  function restoreDocument(raw) { if (!raw) return { data: createBlankData(), error: null, raw: raw }; try { return { data: normalizeDocument(JSON.parse(raw)), error: null, raw: raw }; } catch (error) { return { data: createBlankData(), error: error.message, raw: raw }; } }
+  function kstParts(date) { const parts = new Intl.DateTimeFormat('en-GB', { timeZone: 'Asia/Seoul', year: 'numeric', month: '2-digit', day: '2-digit', hour: '2-digit', minute: '2-digit', hourCycle: 'h23' }).formatToParts(date); return Object.fromEntries(parts.map(function (p) { return [p.type, p.value]; })); }
+  function formatKstTime(date) { const p = kstParts(date); return p.year + '-' + p.month + '-' + p.day + ' ' + p.hour + ':' + p.minute + ' KST'; }
+  function formatKstFileStamp(date) { const p = kstParts(date); return p.year + p.month + p.day + '-' + p.hour + p.minute; }
+  function wrapExportText(value, maxUnits) {
+    const lines = [];
+    String(value).split('\n').forEach(function (line) {
+      let current = '', units = 0;
+      Array.from(line).forEach(function (char) { const width = /[\u0000-\u00ff]/.test(char) ? .55 : 1; if (units + width > maxUnits && current) { lines.push(current); current = ''; units = 0; } current += char; units += width; });
+      lines.push(current);
+    });
+    return lines;
+  }
+  function serializeGridForExport(data, style) {
+    const color = function (name) { return style.getPropertyValue(name).trim(); }, size = 1080, cellSize = 120;
+    let svg = '<svg xmlns="http://www.w3.org/2000/svg" width="1080" height="1080" viewBox="0 0 1080 1080"><rect width="1080" height="1080" fill="' + escapeHtml(color('--color-bg-surface')) + '"/>';
+    for (let block = 0; block < 9; block++) for (let cell = 0; cell < 9; cell++) {
+      const b = getCellBinding(block, cell), value = readBinding(data, b), action = b.type === 'action' ? data.subGoals[b.index].actions[b.actionIndex] : null;
+      const x = (block % 3 * 3 + cell % 3) * cellSize, y = (Math.floor(block / 3) * 3 + Math.floor(cell / 3)) * cellSize;
+      const fill = b.type === 'coreGoal' ? color(data.theme === 'dark' ? '--color-primary-hover' : '--color-primary') : b.type === 'subGoal' ? color('--color-primary-light') : action && action.completed ? color('--color-success-bg') : color('--color-bg-surface');
+      const ink = b.type === 'coreGoal' ? color('--color-text-on-primary') : color('--color-text-main');
+      const rawLines = wrapExportText(value, 9);
+      // ponytail: bounded cell text with adaptive font size; use measured layout if export typography becomes a product requirement.
+      const fontSize = Math.min(13, 98 / (Math.max(rawLines.length, 1) * 1.3));
+      svg += '<g data-export-cell="' + block + '-' + cell + '"><rect x="' + x + '" y="' + y + '" width="120" height="120" fill="' + escapeHtml(fill) + '" stroke="' + escapeHtml(color('--color-border-strong')) + '" stroke-width="1"/>';
+      if (b.type === 'subGoal') svg += '<path d="M' + x + ' ' + (y + 2) + 'h120" stroke="' + escapeHtml(color(COLOR_TOKENS[b.index])) + '" stroke-width="4"/>';
+      svg += '<text x="' + (x + 60) + '" text-anchor="middle" fill="' + escapeHtml(ink) + '" font-family="Pretendard, Apple SD Gothic Neo, Malgun Gothic, sans-serif" font-size="' + fontSize + '" font-weight="' + (b.type === 'action' ? 400 : 700) + '"' + (action && action.completed ? ' text-decoration="line-through"' : '') + '>';
+      rawLines.forEach(function (line, i) { svg += '<tspan x="' + (x + 60) + '" y="' + (y + 60 + (i - (rawLines.length - 1) / 2) * fontSize * 1.3 + fontSize * .35) + '">' + escapeHtml(line) + '</tspan>'; });
+      svg += '</text></g>';
+    }
+    [0, 360, 720, size].forEach(function (pos) { svg += '<path d="M' + pos + ' 0V1080 M0 ' + pos + 'H1080" stroke="' + escapeHtml(color('--color-border-strong')) + '" stroke-width="4"/>'; });
+    return svg + '</svg>';
+  }
+  window.MandalartCore = { SCHEMA_VERSION: SCHEMA_VERSION, SLOT_ORDER: SLOT_ORDER, createBlankData: createBlankData, normalizeDocument: normalizeDocument, validateDocument: validateDocument, acceptTextInput: acceptTextInput, getCellBinding: getCellBinding, readBinding: readBinding, updateBinding: updateBinding, captureBinding: captureBinding, restoreBinding: restoreBinding, toggleAction: toggleAction, calculateProgress: calculateProgress, renderGridMarkup: renderGridMarkup, serializeDocument: serializeDocument, restoreDocument: restoreDocument, formatKstTime: formatKstTime, formatKstFileStamp: formatKstFileStamp, serializeGridForExport: serializeGridForExport };
+  if (typeof document === 'undefined') return;
+  const $ = function (selector) { return document.querySelector(selector); };
+  const PRESETS = JSON.parse($('#preset-data').textContent);
+  const STORAGE_KEY = 'mandalart:v1';
+  let state = createBlankData(), saveTimer, edit = null, focusSlot = null, pendingConfirm = null, modalTrigger = null, modalTriggerSelector = null, storageProtected = false;
+  let presetChoices = PRESETS.templates;
+  function announce(message) { $('#notice').textContent = message; $('#notice').hidden = false; }
+  function safeGet(key) { try { return localStorage.getItem(key); } catch (_) { return null; } }
+  function safeSet(key, value) { try { localStorage.setItem(key, value); return true; } catch (_) { return false; } }
+  function saveNow() {
+    clearTimeout(saveTimer);
+    if (storageProtected) { $('#save-status').textContent = '원래 저장값 보호 중 · JSON으로 먼저 백업해 주세요'; return; }
+    try { localStorage.setItem(STORAGE_KEY, serializeDocument(state)); $('#save-status').textContent = '저장됨 · ' + formatKstTime(new Date()); }
+    catch (_) { $('#save-status').textContent = '자동 저장 불가 · JSON 백업을 이용해 주세요'; }
+  }
+  function scheduleSave() { clearTimeout(saveTimer); $('#save-status').textContent = '저장 중…'; saveTimer = setTimeout(saveNow, 300); }
+  function updateProgress() {
+    const progress = calculateProgress(state);
+    $('#total-percent').textContent = Number(progress.percent.toFixed(2)) + '%';
+    $('#total-count').textContent = progress.completed + ' / 64 완료';
+    $('#total-progress').value = progress.completed;
+    if (!$('#area-progress').children.length) $('#area-progress').innerHTML = state.subGoals.map(function (_, i) { return '<button class="area-row" data-focus="' + SLOT_ORDER[i] + '"><span class="area-name"></span><span class="count"></span><progress max="8" value="0"></progress></button>'; }).join('');
+    state.subGoals.forEach(function (goal, i) {
+      const row = $('#area-progress').children[i], name = goal.title || '영역 ' + (i + 1);
+      row.setAttribute('aria-label', name + ' 집중 작성'); row.querySelector('.area-name').textContent = (i + 1) + '. ' + (goal.title || '영역 이름 정하기'); row.querySelector('.count').textContent = progress.byArea[i] + '/8 ↗'; row.querySelector('progress').value = progress.byArea[i]; row.querySelector('progress').setAttribute('aria-label', name + ' 진척도');
+    });
+  }
+  function renderGrid() { $('#mandalart-grid').innerHTML = renderGridMarkup(state, window.matchMedia('(max-width: 767px)').matches); if (focusSlot !== null && $('#focus-dialog').open) renderFocus(); }
+  function renderFocus() { $('#focus-title').textContent = focusSlot === 4 ? '핵심 목표와 8개의 영역' : (state.subGoals[SLOT_ORDER.indexOf(focusSlot)].title || '영역 ' + (SLOT_ORDER.indexOf(focusSlot) + 1)); $('#focus-grid').innerHTML = renderBlockMarkup(state, focusSlot); }
+  function renderApp() { $('#project-title').value = state.title; renderGrid(); updateProgress(); }
+  function touch() { state.updatedAt = new Date().toISOString(); scheduleSave(); }
+  function syncBinding(key, value, active) {
+    const binding = parseBinding(key);
+    const placeholder = binding.type === 'coreGoal' ? '나의 핵심 목표' : binding.type === 'subGoal' ? '영역 ' + (binding.index + 1) : '실천 ' + (binding.actionIndex + 1);
+    document.querySelectorAll('[data-binding="' + key + '"]').forEach(function (node) {
+      if (node !== active) { node.querySelector('span').textContent = value || placeholder; node.classList.toggle('empty', !value); node.setAttribute('aria-label', placeholder + ': ' + (value || '비어 있음')); }
+      if (binding.type === 'action') { const action = state.subGoals[binding.index].actions[binding.actionIndex], cell = node.closest('.mandalart-cell'), checkbox = cell.querySelector('.action-check'); cell.classList.toggle('completed', action.completed); checkbox.checked = action.completed; checkbox.disabled = !value.trim(); checkbox.setAttribute('aria-label', (value || placeholder) + ' 완료'); }
+    });
+    if (binding.type === 'subGoal' && focusSlot === SLOT_ORDER[binding.index]) $('#focus-title').textContent = value || placeholder;
+    updateProgress();
+  }
+  function startEdit(button) {
+    if (edit) commitEdit();
+    const cell = button.closest('.mandalart-cell'), binding = parseBinding(button.dataset.binding), value = readBinding(state, binding);
+    const input = document.createElement('textarea'); input.className = 'cell-input'; input.maxLength = 500; input.value = value; input.setAttribute('aria-label', button.getAttribute('aria-label') + ' 편집'); input.setAttribute('aria-multiline', 'true');
+    const position = { block: Number(cell.dataset.block), cell: Number(cell.dataset.cell), inFocus: Boolean(cell.closest('#focus-grid')) };
+    edit = { input: input, button: button, binding: binding, key: button.dataset.binding, snapshot: captureBinding(state, binding), position: position };
+    button.hidden = true; cell.insertBefore(input, button); input.focus(); input.setSelectionRange(value.length, value.length);
+    input.addEventListener('input', function () { if (!edit || edit.input !== input) return; const accepted = acceptTextInput(readBinding(state, binding), input.value, binding.type, 500); if (accepted.error) { input.value = accepted.value; input.setSelectionRange(input.value.length, input.value.length); announce('입력할 수 없는 문자가 제거되었습니다 · ' + accepted.error); return; } updateBinding(state, binding, accepted.value); syncBinding(edit.key, accepted.value, button); scheduleSave(); });
+    input.addEventListener('blur', function () { if (edit && edit.input === input) commitEdit(); });
+  }
+  function focusPosition(position, next) {
+    const container = position.inFocus ? $('#focus-grid') : $('#mandalart-grid');
+    const buttons = Array.from(container.querySelectorAll('.cell-editor'));
+    const index = buttons.findIndex(function (button) { const cell = button.closest('.mandalart-cell'); return Number(cell.dataset.block) === position.block && Number(cell.dataset.cell) === position.cell; });
+    const target = buttons[(index + (next ? 1 : 0) + buttons.length) % buttons.length];
+    if (target) target.focus();
+  }
+  function commitEdit(next) {
+    if (!edit) return;
+    const current = edit; edit = null;
+    updateBinding(state, current.binding, current.input.value);
+    current.input.remove(); current.button.hidden = false; syncBinding(current.key, readBinding(state, current.binding)); scheduleSave();
+    if (next !== undefined) focusPosition(current.position, next);
+  }
+  function cancelEdit() { if (!edit) return; const current = edit; edit = null; restoreBinding(state, current.binding, current.snapshot); current.input.remove(); current.button.hidden = false; syncBinding(current.key, current.snapshot.text); scheduleSave(); focusPosition(current.position, false); }
+  function openModal(dialog, trigger) {
+    if (edit) commitEdit();
+    document.querySelectorAll('dialog[open]').forEach(function (other) { other.close(); });
+    modalTrigger = trigger || document.activeElement;
+    modalTriggerSelector = modalTrigger && modalTrigger.id ? '#' + modalTrigger.id : modalTrigger && modalTrigger.dataset.focus ? '[data-focus="' + modalTrigger.dataset.focus + '"]' : null;
+    $('#main').inert = true; $('.topbar').inert = true;
+    dialog.showModal(); (dialog.querySelector('[autofocus]') || dialog.querySelector('button, input, textarea, [tabindex="0"]'))?.focus();
+  }
+  function closeModal(dialog) {
+    if (edit) commitEdit();
+    dialog.close(); if (dialog.id === 'focus-dialog') focusSlot = null; if (dialog.id === 'confirm-dialog') pendingConfirm = null;
+    $('#main').inert = false; $('.topbar').inert = false;
+    const target = modalTrigger && modalTrigger.isConnected ? modalTrigger : modalTriggerSelector ? $(modalTriggerSelector) : $('#core-focus-button');
+    target?.focus();
+  }
+  function openFocus(slot, trigger) { focusSlot = slot; renderFocus(); openModal($('#focus-dialog'), trigger); }
+  function openGuide(trigger) { openModal($('#guide-dialog'), trigger); safeSet('mandalart:onboarding:v1', 'seen'); }
+  function hasContent() { return state.title !== DEFAULT_TITLE || Boolean(state.coreGoal.trim()) || state.subGoals.some(function (goal) { return goal.title.trim() || goal.actions.some(function (a) { return a.text.trim() || a.completed; }); }); }
+  function replaceState(candidate) {
+    const theme = state.theme; state = candidate; state.theme = theme; state.updatedAt = new Date().toISOString();
+    renderApp(); scheduleSave();
+    if (window.matchMedia('(max-width: 767px)').matches) { openFocus(4, $('#mobile-core-focus-button')); $('#focus-grid [data-binding="coreGoal"]').focus(); }
+    else document.querySelector('#mandalart-grid [data-binding="coreGoal"]').focus();
+  }
+  function confirmReplace(candidate, trigger) {
+    if (edit) commitEdit();
+    if (!hasContent() && !storageProtected) { replaceState(candidate); return; }
+    pendingConfirm = function () {
+      if (storageProtected) {
+        try { localStorage.setItem('mandalart:recovery:v1:' + Date.now(), localStorage.getItem(STORAGE_KEY)); storageProtected = false; }
+        catch (_) { announce('손상 원문을 별도 보존할 수 없어 저장을 보류합니다. JSON 백업을 사용해 주세요.'); }
+      }
+      replaceState(candidate);
+    };
+    openModal($('#confirm-dialog'), trigger);
+  }
+  function loadPreset(id, trigger) { const preset = presetChoices.find(function (item) { return item.id === id; }); if (preset) confirmReplace(normalizeDocument(preset), trigger); }
+  function resetData(trigger) { confirmReplace(createBlankData(), trigger); }
+  function showPresets(choices, trigger) {
+    presetChoices = choices || PRESETS.templates;
+    $('#preset-list').innerHTML = presetChoices.map(function (preset) { return '<button class="preset-option" data-preset="' + escapeHtml(preset.id) + '"><strong>' + escapeHtml(preset.title) + '</strong><span>' + escapeHtml(preset.category || '') + '</span><span>' + escapeHtml(preset.description || preset.coreGoal) + '</span></button>'; }).join('') + '<button class="preset-option" data-blank><strong>빈 양식으로 시작</strong><span>나만의 목표를 처음부터 만들어 보세요.</span></button>';
+    openModal($('#preset-dialog'), trigger);
+  }
+  function downloadBlob(blob, filename) { const url = URL.createObjectURL(blob), link = document.createElement('a'); link.href = url; link.download = filename; document.body.append(link); link.click(); link.remove(); setTimeout(function () { URL.revokeObjectURL(url); }, 1000); }
+  function exportJson() { if (edit) commitEdit(); downloadBlob(new Blob([serializeDocument(state)], { type: 'application/json;charset=utf-8' }), 'mandalart-' + formatKstFileStamp(new Date()) + '.json'); }
+  async function importJson(file) {
+    if (!file) return;
+    try {
+      if (file.size > 1024 * 1024) fail('file', '1MB 이내의 JSON 파일을 사용하세요');
+      const input = JSON.parse(await file.text());
+      if (input && Array.isArray(input.templates)) {
+        if (input.templates.length !== 3) fail('templates', '3개 프리셋 파일이 필요합니다');
+        input.templates.forEach(normalizeDocument);
+        showPresets(input.templates, $('#import-button'));
+      } else { const candidate = normalizeDocument(input); confirmReplace(candidate, $('#import-button')); }
+    } catch (error) { announce('가져오기 실패 · ' + error.message + ' · 현재 작성 내용은 유지됩니다.'); }
+    finally { $('#import-file').value = ''; }
+  }
+  function setTheme(theme, persist) {
+    state.theme = theme === 'dark' ? 'dark' : 'light'; document.documentElement.dataset.theme = state.theme;
+    $('#theme-button span').textContent = state.theme === 'dark' ? '라이트' : '다크';
+    $('#theme-button').setAttribute('aria-pressed', String(state.theme === 'dark'));
+    const themeLabel = state.theme === 'dark' ? '라이트 테마로 전환' : '다크 테마로 전환';
+    $('#theme-button').setAttribute('aria-label', themeLabel); $('#theme-button').title = themeLabel;
+    if (persist !== false) { safeSet('mandalart:theme', state.theme); touch(); }
+  }
+  async function exportPng() {
+    if (edit) commitEdit();
+    const button = $('#png-button'); button.disabled = true; button.querySelector('span').textContent = '이미지 만드는 중…';
+    let url;
+    try {
+      if (document.fonts) await document.fonts.ready;
+      const svg = serializeGridForExport(state, getComputedStyle(document.documentElement));
+      url = URL.createObjectURL(new Blob([svg], { type: 'image/svg+xml;charset=utf-8' }));
+      const image = new Image();
+      await new Promise(function (resolve, reject) { image.onload = resolve; image.onerror = function () { reject(new Error('SVG를 이미지로 변환할 수 없습니다')); }; image.src = url; });
+      const canvas = document.createElement('canvas'); canvas.width = 2160; canvas.height = 2160;
+      const context = canvas.getContext('2d'); if (!context) throw new Error('Canvas를 지원하지 않습니다');
+      context.fillStyle = getComputedStyle(document.documentElement).getPropertyValue('--color-bg-surface').trim(); context.fillRect(0, 0, 2160, 2160); context.drawImage(image, 0, 0, 2160, 2160);
+      const blob = await new Promise(function (resolve, reject) { canvas.toBlob(function (value) { value ? resolve(value) : reject(new Error('PNG 변환에 실패했습니다')); }, 'image/png'); });
+      downloadBlob(blob, 'mandalart-' + formatKstFileStamp(new Date()) + '.png');
+      $('#save-status').textContent = 'PNG 저장 · 2160 × 2160px · ' + formatKstTime(new Date());
+    } catch (error) { announce('PNG 저장 실패 · ' + error.message + ' · JSON 백업으로 작성 내용을 보관할 수 있습니다.'); }
+    finally { if (url) URL.revokeObjectURL(url); button.disabled = false; button.querySelector('span').textContent = 'PNG 저장 ↗'; }
+  }
+  document.addEventListener('click', function (event) {
+    const close = event.target.closest('[data-close]');
+    if (close) { closeModal(close.closest('dialog')); return; }
+    const focus = event.target.closest('[data-focus]');
+    if (focus) { openFocus(Number(focus.dataset.focus), focus); return; }
+    const preset = event.target.closest('[data-preset]');
+    if (preset) { const id = preset.dataset.preset; closeModal($('#preset-dialog')); loadPreset(id, $('#preset-button')); return; }
+    if (event.target.closest('[data-blank]')) { closeModal($('#preset-dialog')); resetData($('#preset-button')); return; }
+    const button = event.target.closest('.cell-editor');
+    if (button) {
+      if ((window.matchMedia('(max-width: 767px)').matches || window.matchMedia('(max-width: 1023px) and (pointer: coarse)').matches) && !button.closest('#focus-grid')) openFocus(Number(button.closest('.mandalart-cell').dataset.block), button);
+      else startEdit(button);
+    }
+  });
+  document.addEventListener('change', function (event) {
+    if (event.target.matches('.action-check')) {
+      const parts = event.target.dataset.action.split(':').map(Number), location = { block: Number(event.target.closest('.mandalart-cell').dataset.block), cell: Number(event.target.closest('.mandalart-cell').dataset.cell), inFocus: Boolean(event.target.closest('#focus-grid')) };
+      toggleAction(state, parts[0], parts[1]); renderGrid(); updateProgress(); scheduleSave();
+      const container = location.inFocus ? $('#focus-grid') : $('#mandalart-grid'); container.querySelector('[data-action="' + parts.join(':') + '"]')?.focus();
+    }
+  });
+  document.addEventListener('keydown', function (event) {
+    if (event.isComposing) return;
+    if (edit && event.target === edit.input) {
+      if (event.key === 'Enter' && !event.shiftKey) { event.preventDefault(); commitEdit(true); return; }
+      if (event.key === 'Escape') { event.preventDefault(); event.stopPropagation(); cancelEdit(); return; }
+    }
+    const dialog = event.target.closest('dialog[open]');
+    if (dialog && event.key === 'Tab') {
+      const nodes = Array.from(dialog.querySelectorAll('button:not([disabled]):not([hidden]), input:not([disabled]), textarea, a[href], [tabindex="0"]')).filter(function (node) { return node.getClientRects().length; });
+      const first = nodes[0], last = nodes[nodes.length - 1];
+      if (event.shiftKey && document.activeElement === first) { event.preventDefault(); last?.focus(); }
+      else if (!event.shiftKey && document.activeElement === last) { event.preventDefault(); first?.focus(); }
+    }
+  });
+  document.querySelectorAll('dialog').forEach(function (dialog) { dialog.addEventListener('cancel', function (event) { event.preventDefault(); if (edit) cancelEdit(); else closeModal(dialog); }); });
+  $('#project-title').addEventListener('input', function (event) { const accepted = acceptTextInput(state.title, event.target.value, 'title', 200); if (accepted.error) { event.target.value = accepted.value; announce('입력할 수 없는 문자가 제거되었습니다 · ' + accepted.error); return; } state.title = accepted.value; touch(); });
+  $('#preset-button').addEventListener('click', function () { showPresets(PRESETS.templates, this); });
+  $('#guide-button').addEventListener('click', function () { openGuide(this); });
+  $('#manual-button').addEventListener('click', function () { openModal($('#manual-dialog'), this); });
+  $('#tip-guide-button').addEventListener('click', function () { openGuide(this); });
+  $('#guide-preset-button').addEventListener('click', function () { closeModal($('#guide-dialog')); showPresets(PRESETS.templates, $('#guide-button')); });
+  $('#theme-button').addEventListener('click', function () { setTheme(state.theme === 'light' ? 'dark' : 'light'); });
+  $('#core-focus-button').addEventListener('click', function () { openFocus(4, this); });
+  $('#mobile-core-focus-button').addEventListener('click', function () { openFocus(4, this); });
+  $('#overview-button').addEventListener('click', function () { const open = $('.board-card').classList.toggle('overview-open'); this.setAttribute('aria-expanded', String(open)); this.textContent = open ? '전체 보기 접기' : '81칸 전체 보기'; });
+  $('#reset-button').addEventListener('click', function () { resetData(this); });
+  $('#import-button').addEventListener('click', function () { $('#import-file').click(); });
+  $('#import-file').addEventListener('change', function () { importJson(this.files[0]); });
+  $('#json-button').addEventListener('click', exportJson);
+  $('#png-button').addEventListener('click', exportPng);
+  $('#confirm-accept').addEventListener('click', function () { const action = pendingConfirm; closeModal($('#confirm-dialog')); if (action) action(); });
+  const restored = restoreDocument(safeGet(STORAGE_KEY));
+  state = restored.data; storageProtected = Boolean(restored.error);
+  if (restored.error) announce('저장 데이터를 읽을 수 없습니다 · ' + restored.error + ' · 원문은 보존했으며 자동 덮어쓰기를 중지했습니다. JSON 가져오기 또는 새로 만들기로 복구할 수 있습니다.');
+  setTheme(safeGet('mandalart:theme') || state.theme, false);
+  renderApp();
+  if (storageProtected) $('#save-status').textContent = '손상 저장값 보존 중 · 자동 저장 보류';
+  else if (restored.raw) $('#save-status').textContent = '복원됨 · ' + formatKstTime(new Date(state.updatedAt));
+  window.addEventListener('pagehide', function () { if (saveTimer) saveNow(); });
+  window.matchMedia('(max-width: 767px)').addEventListener('change', function () { if (edit) commitEdit(); renderGrid(); });
+  if (!safeGet('mandalart:onboarding:v1')) openGuide($('#guide-button'));
+})();
+</script>
+</body>
+</html>
+
